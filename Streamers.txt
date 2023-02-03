@@ -1,0 +1,24 @@
+CREATE TABLE games (
+    Id int PRIMARY KEY AUTO_INCREMENT,
+    GameName varchar(255),
+    Cost int,
+    Genre varchar(255)
+    
+);
+
+CREATE TABLE investors (
+    InvestorId int PRIMARY KEY AUTO_INCREMENT,
+    FOREIGN KEY (InvestorId)  REFERENCES streamers (InvestorId)
+    
+);
+
+
+CREATE TABLE streamers (
+    StreamerID int PRIMARY KEY AUTO_INCREMENT,
+    NickName varchar(255),
+    Game varchar(255),
+    GameID int,
+    Subscount int,
+    FOREIGN KEY (GameId)  REFERENCES games (Id),
+    InvestorID int
+);
