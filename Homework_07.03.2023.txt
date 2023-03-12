@@ -1,0 +1,47 @@
+Задача_1.
+
+Найти ко-во завершенных транзакций не в евро на сумму более 100
+db.bank.find(
+{$and: [{currency: {$ne: "EUR"}}, 
+		{status: "completed"}, 
+		{amount: {$gt: 100}}]
+}).count()
+
+Задача_2.
+
+Для всех пользователей не из Китая и не из Испании увеличить баланс на 20%
+db.bank.updateMany(
+{$nor: [{country: "China"}, 
+		{country: "Spain"}]}, 
+		{$mul: {balance: 1.2}
+		})
+
+Задача_3.
+
+Разблокировать пользователей, у которых баланс больше нуля или премиальный статус
+db.bank.updateMany(
+{$or: [{balance: {$gt: 0}}, 
+		{premium: true}]}, 
+		{$set: {blocked: false}})
+
+Задача_4.
+
+Найти пользователей из Китая, которые заблокированы и имеют нулевой баланс
+db.users.find(
+	{
+		"country" :'China',
+		'is_blocked': true ,
+		$or': [
+            	  
+         	   {'balance': 0},
+         	  // {'balance': {'$exists': false}}
+        ]
+	}	
+)
+Задача_5.
+
+Пользователям не из Китая и не из США, имеющим баланс более 5000, установить статус премиум
+db.bank.updateMany(
+{$and: [{country: {$nin: ["China", "USA"]}}
+		, {balance: {$gt: 5000}}]}, 
+		{$set: {premium: true}})
