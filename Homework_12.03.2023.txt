@@ -1,0 +1,128 @@
+Задача_1.
+
+Вывести размеры EURO-транзакций из ЕВРОПЫ в долларах
+db.transactions.aggregate([
+    {
+        '$lookup': {
+            'from': 'users',
+            'localField': 'sender_id',
+            'foreignField': 'id',
+            'as': 'sender'
+        }
+    },
+    {
+        '$match': {
+            'sender.is_europe': true,
+            'currency': 'eur'
+        }
+    },
+    {
+        '$project': {
+            'amount': '$amount',
+             'amount': {
+             '$multiply': ['$amount',1.05]
+             }
+        }
+    }
+])
+
+Задача_2.
+
+Вывести количество USD-транзакций из 'China'
+
+db.transactions.aggregate([
+    {
+        '$lookup': {
+            'from': 'users',
+            'localField': 'sender_id',
+            'foreignField': 'id',
+            'as': 'sender'
+        }
+    },
+    {
+        '$match': {
+            'sender.country': 'China'
+        }
+    },
+    {
+        '$count': 'transaction_count'
+    }
+])
+
+Задача_3.
+
+Вывести три самых больших транзакции в 'usd'
+db.transactions.aggregate([
+    {
+        '$match': {
+            'currency': 'usd'
+        }
+    },
+    {
+        '$sort': {
+            'amount': -1
+        }
+    },
+    
+    {
+        '$limit': 3
+    } 
+])
+   
+
+Задача_4.
+
+Вывести всех незаблокированных пользователей, у которых есть завершенные (is_completed) транзакции от 10 usd 
+
+db.users.aggregate([
+    {
+        '$lookup': {
+          'from': 'transactions',
+          'localField': 'id',
+          'foreignField': 'sender_id',
+          'as': 'transactions'
+        }
+    },
+    {
+        '$match': {
+          'is_blocked': false,
+          'transactions.is_completed': true,
+          'transactions.currency': 'usd',
+          'transactions.amount': {'$gte': 10}
+        }
+    },
+    {
+        '$project': {
+            'id': 1,
+            'fullname': 1
+        }
+    }
+])
+
+Задача_5.
+
+Найти пользователей без транзакций
+
+db.users.aggregate([
+    {
+        $lookup: {
+          from: "transactions",
+          localField: "id",
+          foreignField: "sender_id",
+          as: "sent_transactions"
+        }
+    },
+
+    {
+        $match: {
+            sent_transactions: { $size: 0 }, 
+            
+        }
+    },
+    {
+        '$project': {
+            'id': 1,
+            'fullname': 1
+        }
+    }
+])
