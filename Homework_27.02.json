@@ -1,0 +1,24 @@
+---Домашнее задание
+
+db.credits.insertOne({"name": "Bill", "age": 32, languages: ["english", "french"]})
+db.credits.insertOne({"name": "Tom", "age": 32, languages: ["english", "german"]})
+
+
+db.credits.find()
+
+db.credits.find({name: "Tom", age: 32})
+
+db.credits.insertMany([{"name": "Bob", "age": 26, languages: ["english", "french"]}, 
+{"name": "Alice", "age": 31, languages:["german", "english"]}])
+
+db.credits.find()
+
+
+db.users.replaceOne({name: "Bill"}, {name: "Bob", age: 25})
+
+db.credits.find()
+
+db.credits.insertOne({"name": "Tom", "age": 32, languages: ["english", "german"]})
+db.credits.updateMany({name : "Tom"}, {$set: {name : "Tomas"}})
+
+db.credits.find()

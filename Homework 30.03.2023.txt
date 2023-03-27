@@ -1,0 +1,37 @@
+Задача 1.
+Вывести ТОП-1 стран по общей сумме пожертвований (страна + общая сумма):
+
+db.donations.aggregate([
+  {$group: {_id: "$country", total_donations: {$sum: "$amount"}}},
+  {$sort: {total_donations: -1}},
+  {$limit: 1}
+]);
+
+Задача 2.
+Вывести страны со средней реакцией пользователей:
+
+db.users.aggregate([
+  {$group: {_id: "$country", avg_reaction: {$avg: "$reaction"}}}
+]);
+
+Задача 3.
+
+Вывести названия стримов без пожертвований или без реакций:
+db.streams.find({
+  $nor: [
+    {stream_id: {$in: db.donations.distinct("stream_id")}},
+    {stream_id: {$in: db.reactions.distinct("stream_id")}}
+  ]
+}, {stream_name: 1, _id: 0});
+
+Задача 4. 
+Вывести максимальный размер пожертвования для каждого стримера:
+
+db.donations.aggregate([
+  {$group: {_id: "$streamer_name", max_donation: {$max: "$amount"}}}
+]);
+
+Задача 5.
+
+Вывести ТОП-3 пожертвований из Германии:
+db.donations.find({country: "Germany"}).sort({amount: -1}).limit(3);
