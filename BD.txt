@@ -1,0 +1,38 @@
+Таблица "Courses":
+
+course_id (primary key)
+course_name
+course_description
+course_duration
+course_difficulty
+
+Таблица "Students":
+
+student_id (primary key)
+student_name
+student_email
+student_password
+
+Таблица "Teachers":
+
+teacher_id (primary key)
+teacher_name
+teacher_email
+teacher_password
+
+
+Таблица "Lessons":
+
+lesson_id (primary key)
+lesson_name
+lesson_description
+lesson_duration
+course_id (foreign key to Courses table)
+
+Таблица "Progress":
+
+progress_id (primary key)
+student_id (foreign key to Students table)
+lesson_id (foreign key to Lessons table)
+progress_percent
+progress_date
